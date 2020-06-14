@@ -1,6 +1,5 @@
 package com.tcs.project.sash.api;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tcs.project.sash.model.Address;
 import com.tcs.project.sash.model.Customer;
-import com.tcs.project.sash.services.BankingCURDService;
+import com.tcs.project.sash.services.CustomerService;
 
 @RestController
-@RequestMapping("sash/users")
+@RequestMapping("sash/customers")
 public class UserAPI
 {
 	@Autowired
-	private BankingCURDService userService;
+	private CustomerService userService;
 
-	@GetMapping("user/id/{id}")
-	public ResponseEntity<Customer> getUserByID(@PathVariable("id") String id)
+	@GetMapping("customer/id/{id}")
+	public ResponseEntity<Customer> displayCustomerByID(@PathVariable("id") String id)
 	{
 		Customer obj = userService.findCustomerByID(id);
 		if(obj != null)
@@ -35,8 +33,8 @@ public class UserAPI
 			return new ResponseEntity<Customer> (new Customer(), HttpStatus.OK);
 	}
 	
-	@GetMapping("user/name/{name}")
-	public ResponseEntity<List<Customer>> getUserByName(@PathVariable("name") String name)
+	@GetMapping("customer/name/{name}")
+	public ResponseEntity<List<Customer>> displayCustomerByName(@PathVariable("name") String name)
 	{
 		List<Customer> obj = userService.getCustomerByName(name);
 		
@@ -46,8 +44,8 @@ public class UserAPI
 			return new ResponseEntity<List<Customer>> (new ArrayList<Customer>(), HttpStatus.OK);
 	}
 	
-	@PostMapping("user")
-	public ResponseEntity<Customer> addUser(@RequestBody Customer customer)	
+	@PostMapping("customer")
+	public ResponseEntity<Customer> addNewCustomer(@RequestBody Customer customer)	
 	{
 		Customer obj = userService.addCustomer(customer);
 		if(obj != null)
@@ -56,15 +54,13 @@ public class UserAPI
 			return new ResponseEntity<Customer>(new Customer(), HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("user")
-	public ResponseEntity<Customer> getUser()	
+	@GetMapping("customer")
+	public ResponseEntity<List<Customer>> displayAllCustomers()	
 	{
-		return new ResponseEntity<Customer> (new Customer("U-003", "342167543287", "Shruti", new Address("A-103","65-C","lakshmi nagar","delhi", "delhi", 110126), new Date(21, 6, 1998),"9843661776", "999920145", "shruti.united@gmail.com"), HttpStatus.OK);
-	}
-
-	@GetMapping("all")
-	public ResponseEntity<List<Customer>> getAllUser()	
-	{
-		return new ResponseEntity<List<Customer>> (userService.getAllCustomers(), HttpStatus.OK);
+		List<Customer> list = userService.getAllCustomers();
+		if(list != null)
+			return new ResponseEntity<List<Customer>> (list, HttpStatus.OK);
+		else
+			return new ResponseEntity<List<Customer>> (new ArrayList<>(), HttpStatus.NOT_FOUND);
 	}
 }

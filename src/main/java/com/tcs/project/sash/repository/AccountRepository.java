@@ -19,7 +19,8 @@ public interface AccountRepository extends JpaRepository<Account, String>
 	@Query(value = "SELECT amount FROM account_info WHERE customer_id = :customer_id AND account_type = :type", nativeQuery=true)
 	double getAmountFromAccount(@Param("customer_id") String customer_id, @Param("type") int type);
 	
-	
+//	Customer findByAccountId(String account_id);
+	Account findByAccountId(String account_id);
 	Account findByCustomerIdAndAccountType(Customer customer_id, AccountType type);
 	List<Account> findByCustomerId(Customer customer_id);
 	

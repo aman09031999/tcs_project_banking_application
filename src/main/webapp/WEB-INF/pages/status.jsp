@@ -7,8 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-Home Page
-
-WELCOME To TCS Project
+					Amount Added : ${amount}
 </body>
 </html>

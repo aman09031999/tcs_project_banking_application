@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tcs.project.sash.model.Account;
 import com.tcs.project.sash.model.AccountType;
 //import com.tcs.project.sash.model.Transaction;
-import com.tcs.project.sash.services.BankingOtherService;
+import com.tcs.project.sash.services.AccountService;
 
 @RestController
 @RequestMapping("sash/accounts")
 public class AccountAPI
 {
 	@Autowired
-	private BankingOtherService services;
+	private AccountService services;
 	
 	@PostMapping("account/{customer_id}/current/{amount}")
 	public ResponseEntity<Account> addMoneyToCurrentAccount(@PathVariable("customer_id") String customer_id, @PathVariable("amount") double amount)
