@@ -1,8 +1,25 @@
 package com.tcs.project.sash.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.tcs.project.sash.services.TransactionService;
 
 @Controller
-public class TransactionController {
+@RequestMapping("sash")
+public class TransactionController
+{
+	@Autowired
+	private TransactionService txService;
 
+	@RequestMapping("transaction/displayAll")
+	public ModelAndView displayAllTransaction()
+	{
+		ModelAndView mv = new ModelAndView("transaction_list");
+		mv.addObject("transaction", txService.getAllTransaction());
+		
+		return mv;
+	}
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tcs.project.sash.model.Account;
+import com.tcs.project.sash.model.AccountOperation;
 import com.tcs.project.sash.model.AccountType;
 import com.tcs.project.sash.model.Customer;
 import com.tcs.project.sash.model.Status;
@@ -27,7 +28,7 @@ public class AccountService implements AccountServiceInterface
 	private TransactionRepository txRepo;
 	
 	@Override
-	public String depositMoney(String id, AccountType type, double amount)
+	public String depositMoney(String id, AccountType type, double amount, String message)
 	{	
 		if(accountRepo.existsById(id))
 		{
@@ -35,6 +36,10 @@ public class AccountService implements AccountServiceInterface
 			Account account = accountRepo.findByAccountId(id);
 			System.out.println("Account Details [Before] : " + account);
 			account.setAmount(account.getAmount() + amount);
+			account.setMessage(message);
+			account.setLast_updated(new Date());
+			account.setLast_operation(AccountOperation.created);
+			
 			System.out.println("Account Details [After] : " + accountRepo.getOne(id));
 			
 			String tx_id = "TX-100" + (txRepo.count() + 1);
@@ -47,7 +52,7 @@ public class AccountService implements AccountServiceInterface
 	}
 	
 	@Override
-	public String withdrawMoney(String id, AccountType type, double amount)
+	public String withdrawMoney(String id, AccountType type, double amount, String message)
 	{	
 		if(accountRepo.existsById(id))
 		{
@@ -56,6 +61,9 @@ public class AccountService implements AccountServiceInterface
 			if(account.getAmount()>amount)
 			{
 				account.setAmount(account.getAmount() - amount);
+				account.setMessage(message);
+				account.setLast_operation(AccountOperation.debited);
+				account.setLast_updated(new Date());
 				
 				String tx_id = "TX-100" + (txRepo.count() + 1);
 				txRepo.save(new Transaction(tx_id, new Date(), account.getCustomerId(), type, AccountType.self, amount));
@@ -77,12 +85,13 @@ public class AccountService implements AccountServiceInterface
 	}
 
 	@Override
-	public Account addNewAccount(Customer customer, AccountType type, double baseAmount)
+	public Account addNewAccount(Customer customer, AccountType type, double baseAmount, String message)
 	{
+		message = "new account is created";
 		if(customerRepo.existsById(customer.getcustomer_id()))
 		{	
 			String account_id = "ACC-100" + (accountRepo.count() + 1);
-			Account account = new Account(account_id, type, customer, new Date(), baseAmount, Status.active);
+			Account account = new Account(account_id, type, customer, new Date(), baseAmount, Status.active, "new account is created", AccountOperation.created, new Date() );
 		
 			accountRepo.save(account);
 			
@@ -145,8 +154,8 @@ public class AccountService implements AccountServiceInterface
 	}
 	
 	@Override
-	public String transferMoney(String customer_id, AccountType source, AccountType destination, double amount)
-	{		
+	public String transferMoney(String customer_id, AccountType source, AccountType destination, double amount, String message)
+	{
 		if(customerRepo.existsById(customer_id))
 		{
 			Customer customer = customerRepo.getOne(customer_id);
@@ -157,6 +166,14 @@ public class AccountService implements AccountServiceInterface
 			{
 				src.setAmount(src.getAmount() - amount);
 				dest.setAmount(dest.getAmount() + amount);
+				
+				src.setMessage(message);
+				src.setLast_operation(AccountOperation.debited);
+				src.setLast_updated(new Date());
+				
+				dest.setMessage(message);
+				dest.setLast_operation(AccountOperation.credited);
+				dest.setLast_updated(new Date());
 				
 				accountRepo.save(src);
 				accountRepo.save(dest);

@@ -36,7 +36,7 @@ public class CustomerService implements CustomerServiceInterface
 	}
 
 	@Override
-	public Customer findCustomerByID(String id)
+	public Customer getCustomerByID(String id)
 	{
 		if(customerRepo.existsById(id))
 		{

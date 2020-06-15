@@ -26,7 +26,7 @@ public class UserAPI
 	@GetMapping("customer/id/{id}")
 	public ResponseEntity<Customer> displayCustomerByID(@PathVariable("id") String id)
 	{
-		Customer obj = userService.findCustomerByID(id);
+		Customer obj = userService.getCustomerByID(id);
 		if(obj != null)
 			return new ResponseEntity<Customer> (obj, HttpStatus.OK);
 		else

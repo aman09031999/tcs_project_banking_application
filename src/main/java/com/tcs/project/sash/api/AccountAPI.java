@@ -24,10 +24,12 @@ public class AccountAPI
 	@Autowired
 	private AccountService services;
 	
-	@PostMapping("account/{customer_id}/current/{amount}")
-	public ResponseEntity<Account> addMoneyToCurrentAccount(@PathVariable("customer_id") String customer_id, @PathVariable("amount") double amount)
+	@PostMapping("account/{customer_id}/current/{amount}/{message}")
+	public ResponseEntity<Account> addMoneyToCurrentAccount(@PathVariable("customer_id") String customer_id,
+															@PathVariable("amount") double amount,
+															@PathVariable("message") String message)
 	{
-		Account obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.current, amount);
+		Account obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.current, amount, message);
 		
 		if(obj != null)
 			return new ResponseEntity<Account> (obj, HttpStatus.OK);
@@ -35,10 +37,12 @@ public class AccountAPI
 			return new ResponseEntity<Account> (new Account(), HttpStatus.NOT_FOUND);
 	}
 	
-	@PostMapping("account/{customer_id}/saving/{amount}")
-	public ResponseEntity<Account> addMoneyToSavingAccount(@PathVariable("customer_id") String customer_id, @PathVariable("amount") double amount)
+	@PostMapping("account/{customer_id}/saving/{amount}/{message}")
+	public ResponseEntity<Account> addMoneyToSavingAccount(@PathVariable("customer_id") String customer_id,
+															@PathVariable("amount") double amount,
+															@PathVariable("message") String message)
 	{
-		Account obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.saving, amount);
+		Account obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.saving, amount, message);
 		
 		if(obj != null)
 			return new ResponseEntity<Account> (obj, HttpStatus.OK);
@@ -91,17 +95,19 @@ public class AccountAPI
 	}
 	
 
-	@GetMapping("account/transaction/savings-to-current/{customer_id}/{amount}")
+	@GetMapping("account/transaction/savings-to-current/{customer_id}/{amount}/{message}")
 	public ResponseEntity<String> executeTransactionFromSavingToCurrent(@PathVariable("customer_id") String customer_id,
-																			@PathVariable("amount") double amount)
+																			@PathVariable("amount") double amount,
+																			@PathVariable("message") String message)
 	{
-		return new ResponseEntity<String> (services.transferMoney(customer_id, AccountType.saving, AccountType.current, amount), HttpStatus.OK);
+		return new ResponseEntity<String> (services.transferMoney(customer_id, AccountType.saving, AccountType.current, amount, message), HttpStatus.OK);
 	}
 	
-	@GetMapping("account/transaction/current-to-savings/{customer_id}/{amount}")
+	@GetMapping("account/transaction/current-to-savings/{customer_id}/{amount}/{message}")
 	public ResponseEntity<String> executeTransactionFromCurrentToSaving(@PathVariable("customer_id") String customer_id,
-																			@PathVariable("amount") double amount)
+																			@PathVariable("amount") double amount,
+																			@PathVariable("message") String message)
 	{
-		return new ResponseEntity<String> (services.transferMoney(customer_id, AccountType.current, AccountType.saving, amount), HttpStatus.OK);
+		return new ResponseEntity<String> (services.transferMoney(customer_id, AccountType.current, AccountType.saving, amount, message), HttpStatus.OK);
 	}
 }

@@ -7,7 +7,7 @@ import com.tcs.project.sash.model.Customer;
 public interface CustomerServiceInterface
 {
 	public List<Customer> getCustomerByName(String name);
-	public Customer findCustomerByID(String id);
+	public Customer getCustomerByID(String id);
 	public List<Customer> getAllCustomers();
 	public boolean deleteCustomerByID(String id);
 	public boolean updateCustomerByID(String id);
