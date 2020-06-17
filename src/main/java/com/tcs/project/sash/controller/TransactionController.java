@@ -14,10 +14,10 @@ public class TransactionController
 	@Autowired
 	private TransactionService txService;
 
-	@RequestMapping("transaction/displayAll")
+	@RequestMapping("banking/transaction/all")
 	public ModelAndView displayAllTransaction()
 	{
-		ModelAndView mv = new ModelAndView("transaction_list");
+		ModelAndView mv = new ModelAndView("banking/transactions");
 		mv.addObject("transaction", txService.getAllTransaction());
 		
 		return mv;

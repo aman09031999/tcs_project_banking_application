@@ -13,19 +13,9 @@ import com.tcs.project.sash.model.Transaction;
 @EnableJpaRepositories
 public interface TransactionRepository extends JpaRepository<Transaction, String>
 {
-	@Query(value = "SELECT * transaction_info WHERE dot BETWEEN :from AND :to", nativeQuery=true)
+	@Query(value = "SELECT * FROM transaction_info WHERE dot BETWEEN :from AND :to", nativeQuery=true)
 	List<Transaction> findByDot(@Param("from") Date from, @Param("to") Date to);
+	
+//	@Query(value = "SELECT * FROM transaction_info WHERE customer_id:id ", nativeQuery=true)
+	List<Transaction> findByCustomerId(String id);
 }
-/*
-	public TransactionRepository()
-	{
-		txList.add(new Transaction("T-001", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.current, AccountType.saving, 2000.00));
-		txList.add(new Transaction("T-002", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.saving, AccountType.current, 4000.00));
-		txList.add(new Transaction("T-003", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.saving, AccountType.current, 1000.00));
-		txList.add(new Transaction("T-004", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.current, AccountType.saving, 6000.00));
-		txList.add(new Transaction("T-005", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.current, AccountType.saving, 9000.00));
-		txList.add(new Transaction("T-006", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.saving, AccountType.current, 7000.00));
-		txList.add(new Transaction("T-007", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.saving, AccountType.current, 1000.00));
-		txList.add(new Transaction("T-008", new Date(), userRepo.getAllUsers().get(randomUser(min, max)), AccountType.current, AccountType.saving, 5000.00));
-	}	
-*/

@@ -38,12 +38,12 @@ public class AccountService implements AccountServiceInterface
 			account.setAmount(account.getAmount() + amount);
 			account.setMessage(message);
 			account.setLast_updated(new Date());
-			account.setLast_operation(AccountOperation.created);
+			account.setLast_operation(AccountOperation.credited);
 			
 			System.out.println("Account Details [After] : " + accountRepo.getOne(id));
 			
 			String tx_id = "TX-100" + (txRepo.count() + 1);
-			txRepo.save(new Transaction(tx_id, new Date(), account.getCustomerId(), type, AccountType.self, amount));
+			txRepo.save(new Transaction(tx_id, new Date(), account.getCustomerId().getCustomer_id(), type, AccountType.self, amount));
 			
 			return "Money Deposited Successfully...!!!";
 		}
@@ -66,7 +66,7 @@ public class AccountService implements AccountServiceInterface
 				account.setLast_updated(new Date());
 				
 				String tx_id = "TX-100" + (txRepo.count() + 1);
-				txRepo.save(new Transaction(tx_id, new Date(), account.getCustomerId(), type, AccountType.self, amount));
+				txRepo.save(new Transaction(tx_id, new Date(), account.getCustomerId().getCustomer_id(), type, AccountType.self, amount));
 				
 				return "Money Withdraw Successfully...!!!";
 			}
@@ -85,20 +85,20 @@ public class AccountService implements AccountServiceInterface
 	}
 
 	@Override
-	public Account addNewAccount(Customer customer, AccountType type, double baseAmount, String message)
+	public String addNewAccount(Customer customer, AccountType type, double baseAmount, String message)
 	{
 		message = "new account is created";
-		if(customerRepo.existsById(customer.getcustomer_id()))
+		if(customerRepo.existsById(customer.getCustomer_id()))
 		{	
 			String account_id = "ACC-100" + (accountRepo.count() + 1);
 			Account account = new Account(account_id, type, customer, new Date(), baseAmount, Status.active, "new account is created", AccountOperation.created, new Date() );
 		
 			accountRepo.save(account);
 			
-			return account;
+			return "Account with ID : " + account_id + " is created for Customer ID : " + customer.getCustomer_id();
 		}
 		
-		return new Account();
+		return "Customer ID : " + customer.getCustomer_id() + " failed to created";
 	}
 
 	public Customer getCustomerById(String id)
@@ -179,7 +179,7 @@ public class AccountService implements AccountServiceInterface
 				accountRepo.save(dest);
 			
 				String tx_id = "TX-100" + (txRepo.count() + 1);
-				txRepo.save(new Transaction(tx_id, new Date(), customer, source, destination, amount));
+				txRepo.save(new Transaction(tx_id, new Date(), customer.getCustomer_id(), source, destination, amount));
 				
 				return "transaction Successfull...!!!";
 			}

@@ -9,6 +9,15 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("sash")
 public class HomeController
 {
+	
+	@RequestMapping("/")
+	public ModelAndView home()
+	{
+		ModelAndView mv = new ModelAndView("index");
+		
+		return mv;
+	}
+	
 	@RequestMapping(value = "login", method= RequestMethod.GET)
 	public ModelAndView login()
 	{

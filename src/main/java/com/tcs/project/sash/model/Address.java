@@ -42,7 +42,6 @@ public class Address
 
 	@Override
 	public String toString() {
-		return "Address [address_id=" + address_id + ", plot=" + plot + ", area=" + area + ", district=" + district
-				+ ", state=" + state + ", pincode=" + pincode + "]";
+		return plot + "," + area + ", " + district + ", " + state + ", " + pincode;
 	}
 }

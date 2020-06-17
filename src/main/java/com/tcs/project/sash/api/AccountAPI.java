@@ -25,29 +25,29 @@ public class AccountAPI
 	private AccountService services;
 	
 	@PostMapping("account/{customer_id}/current/{amount}/{message}")
-	public ResponseEntity<Account> addMoneyToCurrentAccount(@PathVariable("customer_id") String customer_id,
+	public ResponseEntity<String> addMoneyToCurrentAccount(@PathVariable("customer_id") String customer_id,
 															@PathVariable("amount") double amount,
 															@PathVariable("message") String message)
 	{
-		Account obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.current, amount, message);
+		String obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.current, amount, message);
 		
 		if(obj != null)
-			return new ResponseEntity<Account> (obj, HttpStatus.OK);
+			return new ResponseEntity<String> (obj, HttpStatus.OK);
 		else
-			return new ResponseEntity<Account> (new Account(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String> ("ERROR", HttpStatus.NOT_FOUND);
 	}
 	
 	@PostMapping("account/{customer_id}/saving/{amount}/{message}")
-	public ResponseEntity<Account> addMoneyToSavingAccount(@PathVariable("customer_id") String customer_id,
+	public ResponseEntity<String> addMoneyToSavingAccount(@PathVariable("customer_id") String customer_id,
 															@PathVariable("amount") double amount,
 															@PathVariable("message") String message)
 	{
-		Account obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.saving, amount, message);
+		String obj = services.addNewAccount(services.getCustomerById(customer_id), AccountType.saving, amount, message);
 		
 		if(obj != null)
-			return new ResponseEntity<Account> (obj, HttpStatus.OK);
+			return new ResponseEntity<String> (obj, HttpStatus.OK);
 		else
-			return new ResponseEntity<Account> (new Account(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String> ("ERROR", HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping("account/{account_id}/all")
